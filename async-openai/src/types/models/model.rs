@@ -8,9 +8,10 @@ pub struct Model {
     /// The object type, which is always "model".
     pub object: String,
     /// The Unix timestamp (in seconds) when the model was created.
-    pub created: u32,
+    pub created: Option<u32>,
     /// The organization that owns the model.
     pub owned_by: String,
+    display_name: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq, Serialize)]
