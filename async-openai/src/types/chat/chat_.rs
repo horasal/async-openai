@@ -995,7 +995,14 @@ pub struct CreateChatCompletionRequest {
     pub metadata: Option<Metadata>, // nullable: true
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub chat_template_kwargs: Option<String>,
+    pub chat_template_kwargs: Option<ChatCompletionTemplateKwargs>,
+}
+
+/// Options for Template KWargs, only available for llama.cpp
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq)]
+pub struct ChatCompletionTemplateKwargs {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    enable_thinking: Option<bool>,
 }
 
 /// Options for streaming response. Only set this when you set `stream: true`.
