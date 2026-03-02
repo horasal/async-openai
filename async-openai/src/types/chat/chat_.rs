@@ -993,6 +993,9 @@ pub struct CreateChatCompletionRequest {
     ///  Developer-defined tags and values used for filtering completions in the [dashboard](https://platform.openai.com/chat-completions).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<Metadata>, // nullable: true
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_template_kwargs: Option<String>,
 }
 
 /// Options for streaming response. Only set this when you set `stream: true`.
