@@ -50,7 +50,7 @@ pub enum CompletionFinishReason {
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct Choice {
     pub text: String,
-    pub index: u32,
+    pub index: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logprobs: Option<Logprobs>,
     #[serde(skip_serializing_if = "Option::is_none")]
