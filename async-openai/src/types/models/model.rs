@@ -10,7 +10,7 @@ pub struct Model {
     /// The Unix timestamp (in seconds) when the model was created.
     pub created: Option<u32>,
     /// The organization that owns the model.
-    pub owned_by: String,
+    pub owned_by: Option<String>,
     pub display_name: Option<String>,
 }
 
