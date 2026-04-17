@@ -1003,6 +1003,8 @@ pub struct CreateChatCompletionRequest {
 pub struct ChatCompletionTemplateKwargs {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_thinking: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preserve_thinking: Option<bool>,
 }
 
 /// Options for streaming response. Only set this when you set `stream: true`.
