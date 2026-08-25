@@ -8,7 +8,6 @@ use crate::{
     Client, RequestOptions,
 };
 
-#[cfg(not(target_family = "wasm"))]
 use crate::types::responses::ResponseStream;
 
 pub struct Responses<'c, C: Config> {
@@ -47,12 +46,11 @@ impl<'c, C: Config> Responses<'c, C> {
     /// Creates a model response for the given input with streaming.
     ///
     /// Response events will be sent as server-sent events as they become available,
-    #[cfg(not(target_family = "wasm"))]
     #[crate::byot(
         T0 = serde::Serialize,
         R = serde::de::DeserializeOwned,
         stream = "true",
-        where_clause = "R: std::marker::Send + 'static"
+        where_clause = "R: crate::traits::MaybeSend + 'static"
     )]
     #[allow(unused_mut)]
     pub async fn create_stream(
@@ -68,10 +66,9 @@ impl<'c, C: Config> Responses<'c, C> {
             }
             request.stream = Some(true);
         }
-        Ok(self
-            .client
+        self.client
             .post_stream("/responses", request, &self.request_options)
-            .await)
+            .await
     }
 
     /// Retrieves a model response with the given ID.
@@ -88,21 +85,19 @@ impl<'c, C: Config> Responses<'c, C> {
     /// Retrieves a model response with the given ID with streaming.
     ///
     /// Response events will be sent as server-sent events as they become available.
-    #[cfg(not(target_family = "wasm"))]
     #[crate::byot(
         T0 = std::fmt::Display,
         R = serde::de::DeserializeOwned,
         stream = "true",
-        where_clause = "R: std::marker::Send + 'static"
+        where_clause = "R: crate::traits::MaybeSend + 'static"
     )]
     pub async fn retrieve_stream(&self, response_id: &str) -> Result<ResponseStream, OpenAIError> {
         let mut request_options = self.request_options.clone();
         request_options.with_query(&[("stream", "true")])?;
 
-        Ok(self
-            .client
+        self.client
             .get_stream(&format!("/responses/{}", response_id), &request_options)
-            .await)
+            .await
     }
 
     /// Deletes a model response with the given ID.
