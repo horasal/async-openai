@@ -8,7 +8,6 @@ use crate::{
     Client, RequestOptions,
 };
 
-#[cfg(not(target_family = "wasm"))]
 use crate::types::chat::ChatCompletionResponseStream;
 
 /// Given a list of messages comprising a conversation, the model will return a response.
@@ -66,12 +65,11 @@ impl<'c, C: Config> Chat<'c, C> {
     /// [ChatCompletionResponseStream] is a parsed SSE stream until a \[DONE\] is received from server.
     ///
     /// byot: You must ensure "stream: true" in serialized `request`
-    #[cfg(not(target_family = "wasm"))]
     #[crate::byot(
         T0 = serde::Serialize,
         R = serde::de::DeserializeOwned,
         stream = "true",
-        where_clause = "R: std::marker::Send + 'static"
+        where_clause = "R: crate::traits::MaybeSend + 'static"
     )]
     #[allow(unused_mut)]
     pub async fn create_stream(
@@ -88,10 +86,9 @@ impl<'c, C: Config> Chat<'c, C> {
 
             request.stream = Some(true);
         }
-        Ok(self
-            .client
+        self.client
             .post_stream("/chat/completions", request, &self.request_options)
-            .await)
+            .await
     }
 
     /// List stored Chat Completions. Only Chat Completions that have been stored
